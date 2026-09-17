@@ -540,6 +540,129 @@
         </div>
         <div id="strategyList"></div>
         <div class="empty" id="emptyStrategy" style="display:none;">제안할 근거 데이터가 없습니다.</div>
+        <div style="margin-top:14px; padding-top:14px; border-top:1px solid var(--line);">
+          <button class="btn btn-ghost" id="btnGoMagazine" style="padding:0; font-size:13px;">이 신호에 맞는 마케팅 전략, 마케팅 매거진에서 보기 →</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-magazine" data-title="마케팅 매거진">
+      <div class="panel-head">
+        <div class="kicker">AI MD 전략 · 참고자료</div>
+        <h2>마케팅 매거진</h2>
+        <p>여기 담긴 내용은 상품 데이터에서 계산된 진단·전략 신호가 아니라, MD 실무에 참고할 마케팅 용어·트렌드·전략을 정리한 읽을거리입니다. 계산된 결과와 헷갈리지 않도록 별도 탭으로 분리했습니다.</p>
+      </div>
+
+      <div class="card">
+        <h3>마케팅 용어사전 <span class="tag badge neutral">실무 참고</span></h3>
+        <p style="margin:-6px 0 14px; font-size:12.5px; color:var(--ink-soft);">마케팅팀과 협업하거나 캠페인 자료를 검토할 때 자주 마주치는 용어입니다.</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th style="width:160px;">용어</th><th>의미</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">CTR</td><td>클릭률(Click Through Rate). 광고·콘텐츠 노출 대비 클릭 비율.</td></tr>
+              <tr><td class="mono">CPC / CPA</td><td>클릭 1회(Cost Per Click) 또는 행동 1건(Cost Per Action, 구매·가입 등)당 광고비.</td></tr>
+              <tr><td class="mono">ROAS</td><td>광고비 대비 매출(Return On Ad Spend). 광고 성과를 판단하는 기본 지표.</td></tr>
+              <tr><td class="mono">LTV</td><td>고객 생애가치(Lifetime Value). 한 고객이 거래 기간 전체에 걸쳐 만들어내는 누적 매출.</td></tr>
+              <tr><td class="mono">리텐션</td><td>재구매·재방문율. 신규 유입보다 기존 고객 유지 여부를 보는 지표.</td></tr>
+              <tr><td class="mono">퍼포먼스 마케팅</td><td>클릭·전환 등 수치로 성과를 즉시 확인하며 운영하는 광고 방식(검색광고, SNS광고 등).</td></tr>
+              <tr><td class="mono">그로스해킹</td><td>적은 비용으로 빠르게 실험하며 성장 방법을 찾는 방식. 스타트업식 마케팅 실험 접근.</td></tr>
+              <tr><td class="mono">UGC</td><td>사용자 제작 콘텐츠(User Generated Content). 구매자 후기·사용영상 등.</td></tr>
+              <tr><td class="mono">제로파티 데이터</td><td>고객이 스스로 알려준 정보(취향 설문, 회원 프로필 등). 쿠키 규제 시대의 대안 데이터.</td></tr>
+              <tr><td class="mono">제로클릭</td><td>AI 검색 요약만 보고 클릭 없이 구매를 결정하는 현상. 아래 [요즘 마케팅] 참고.</td></tr>
+              <tr><td class="mono">다크소셜</td><td>카카오톡·디스코드 등 비공개 채널로 공유되어 추적이 어려운 소셜 유입.</td></tr>
+              <tr><td class="mono">ABM</td><td>어카운트 기반 마케팅(Account-Based Marketing). 개별 고객이 아니라 기업(거래처) 단위로 맞춤 공략. B2B에서 주로 사용.</td></tr>
+              <tr><td class="mono">바잉그룹</td><td>B2B 거래에서 구매를 결정하는 담당자 집단(보통 5~16명). 한 명이 아니라 이 그룹 전체를 설득해야 함.</td></tr>
+              <tr><td class="mono">에이전틱 AI</td><td>사람 개입 없이 캠페인 실행·리드 분류까지 스스로 처리하는 AI. 2026년 B2B 마케팅의 핵심 화두.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>[요즘 마케팅] <span class="tag badge neutral">2026년 트렌드·이슈</span></h3>
+        <p style="margin:-6px 0 14px; font-size:12.5px; color:var(--ink-soft);">국내외 마케팅 리포트 기준으로 정리한 최신 흐름입니다. 트렌드는 계속 바뀌니 주기적으로(월 1회 권장) 갱신해주세요.</p>
+        <div id="magazineTrendList">
+          <div class="strategy-item mz-item">
+            <div class="strategy-num">1</div>
+            <div class="strategy-body">
+              <button class="mz-toggle" style="all:unset; cursor:pointer; display:block;"><h4>제로클릭 시대 — AI 검색 요약만 보고 구매 결정</h4></button>
+              <p class="mz-detail">AI 검색이 요약해주는 답만 보고 클릭 없이 구매를 결정하는 소비자가 늘고 있습니다. 상품 상세페이지 문구를 AI가 그대로 인용하기 좋은 형태(스펙·장점 요약, 구조화된 표)로 정리해두는 것이 SEO 못지않게 중요해지고 있습니다.</p>
+            </div>
+          </div>
+          <div class="strategy-item mz-item">
+            <div class="strategy-num">2</div>
+            <div class="strategy-body">
+              <button class="mz-toggle" style="all:unset; cursor:pointer; display:block;"><h4>필코노미 — 기분(Feel)과 소비(Economy)의 결합</h4></button>
+              <p class="mz-detail">가격·성능만큼 "기분 좋은 소비 경험"이 구매 이유가 되는 흐름입니다. 캐릭터·IP 콜라보, 체험형 팝업, 언박싱 경험 디자인처럼 감성을 자극하는 접근이 하드웨어 제품에도 적용되고 있습니다.</p>
+            </div>
+          </div>
+          <div class="strategy-item mz-item">
+            <div class="strategy-num">3</div>
+            <div class="strategy-body">
+              <button class="mz-toggle" style="all:unset; cursor:pointer; display:block;"><h4>프라이스 디코딩 — 가격 구성의 투명성 요구</h4></button>
+              <p class="mz-detail">소비자가 "왜 이 가격인지"를 궁금해하고 검증하려는 경향이 커지고 있습니다. 원가 구조나 유통 과정을 일부 공개하거나, 경쟁사 대비 가격 근거를 명확히 설명하는 콘텐츠가 신뢰를 만듭니다.</p>
+            </div>
+          </div>
+          <div class="strategy-item mz-item">
+            <div class="strategy-num">4</div>
+            <div class="strategy-body">
+              <button class="mz-toggle" style="all:unset; cursor:pointer; display:block;"><h4>다크소셜·커뮤니티 커머스 확산</h4></button>
+              <p class="mz-detail">인스타그램·틱톡의 공개 피드보다 카카오톡 오픈채팅, 디스코드, 소규모 커뮤니티(5,000명 이하) 안에서의 입소문이 구매에 더 큰 영향을 주는 경향입니다. PC 커뮤니티(견적 공유방, 조립 후기방)가 대표적인 예입니다.</p>
+            </div>
+          </div>
+          <div class="strategy-item mz-item">
+            <div class="strategy-num">5</div>
+            <div class="strategy-body">
+              <button class="mz-toggle" style="all:unset; cursor:pointer; display:block;"><h4>에이전틱 AI 마케팅 — 캠페인 실행의 자동화</h4></button>
+              <p class="mz-detail">리드 분류, 맞춤 메시지 발송, 입찰가 조정까지 AI가 사람 개입 없이 처리하는 방식이 B2B 마케팅에서 특히 빠르게 자리잡고 있습니다. GRIDIT의 자동화 방향과도 맞닿아 있는 흐름입니다.</p>
+            </div>
+          </div>
+          <div class="strategy-item mz-item">
+            <div class="strategy-num">6</div>
+            <div class="strategy-body">
+              <button class="mz-toggle" style="all:unset; cursor:pointer; display:block;"><h4>시즌 마케팅 캘린더 (국내 리테일 기준)</h4></button>
+              <p class="mz-detail">2~3월 신학기 수요, 6~8월 여름휴가·방학 시즌, 9~10월 추석, 11월 코리아세일페스타·블랙프라이데이, 12월 연말·크리스마스가 국내 리테일의 주요 성수기입니다. PC 하드웨어는 특히 신학기·방학 시즌에 조립 수요가 몰리는 편이라 미리 프로모션을 준비해두면 좋습니다.</p>
+            </div>
+          </div>
+        </div>
+        <p class="mono" style="margin-top:12px; font-size:11px; color:var(--ink-soft);">참고: 트렌드코리아 2026(이커머스 8대 키워드), Improvado 2026 B2C/B2B 마케팅 트렌드 리포트 기준으로 정리 (2026년 9월 기준, 주기적 업데이트 필요)</p>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <h3>B2C 전략 <span class="tag badge neutral">일반 소비자</span></h3>
+          <h4 style="font-size:12.5px; color:var(--ink-soft); margin:0 0 8px;">홈페이지(자사몰)</h4>
+          <ul style="margin:0 0 16px; padding-left:18px; font-size:13.5px; line-height:1.7;">
+            <li>구매 이력 기반 개인화 추천, AI 챗봇 상담 도입</li>
+            <li>스펙·구성·원산지 등 가격 근거를 투명하게 공개(프라이스 디코딩 대응)</li>
+            <li>AI 검색이 그대로 인용할 수 있게 상품 상세를 표·요약 형태로 구조화(제로클릭 대응)</li>
+            <li>소포장·체험판·번들 같은 소단위 구매 옵션 마련</li>
+          </ul>
+          <h4 style="font-size:12.5px; color:var(--ink-soft); margin:0 0 8px;">SNS</h4>
+          <ul style="margin:0; padding-left:18px; font-size:13.5px; line-height:1.7;">
+            <li>인스타그램·유튜브 숏폼·틱톡에 조립·언박싱 등 체험형 콘텐츠</li>
+            <li>체험단·인플루언서 리뷰로 UGC(사용자 후기) 축적</li>
+            <li>카카오톡 오픈채팅·디스코드 등 다크소셜 커뮤니티 직접 운영</li>
+            <li>캐릭터·IP 콜라보, 시즌 이벤트로 감성 소비(필코노미) 자극</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>B2B 전략 <span class="tag badge neutral">기업·기관 고객</span></h3>
+          <h4 style="font-size:12.5px; color:var(--ink-soft); margin:0 0 8px;">홈페이지(기업고객향)</h4>
+          <ul style="margin:0 0 16px; padding-left:18px; font-size:13.5px; line-height:1.7;">
+            <li>대량구매·납품·조달 전용 문의·견적 요청 페이지 분리</li>
+            <li>도입 사례·레퍼런스 공개로 신뢰 확보</li>
+            <li>구매를 결정하는 바잉그룹(담당자 여러 명) 전체를 겨냥한 자료(제안서, 비교표) 준비</li>
+            <li>초기 문의는 AI 챗봇으로 자동 응대 후 담당자 연결</li>
+          </ul>
+          <h4 style="font-size:12.5px; color:var(--ink-soft); margin:0 0 8px;">SNS</h4>
+          <ul style="margin:0; padding-left:18px; font-size:13.5px; line-height:1.7;">
+            <li>링크드인 중심 콘텐츠 운영, 담당 직원 개인 계정을 통한 자연스러운 확산(임직원 애드보커시)</li>
+            <li>소규모 웨비나·오프라인 밋업으로 관계 기반 영업</li>
+            <li>업계 전문가·파트너사와 협업 콘텐츠로 신뢰도 보강</li>
+          </ul>
+        </div>
       </div>
     </section>
 
@@ -578,6 +701,7 @@
     {id:'sales', label:'판매·매출'},
     {id:'stock', label:'재고·회전율'},
     {id:'strategy', label:'AI MD 전략'},
+    {id:'magazine', label:'마케팅 매거진'},
     {id:'dashboard', label:'대시보드'},
   ];
 
@@ -1232,6 +1356,19 @@
     renderStrategyPanel();
     renderDashboard();
   }
+
+  // ---------------- 마케팅 매거진 (정적 콘텐츠) ----------------
+  document.getElementById('btnGoMagazine').addEventListener('click', ()=> switchPanel('magazine'));
+  document.querySelectorAll('#magazineTrendList .mz-item').forEach(item=>{
+    const toggle = item.querySelector('.mz-toggle');
+    const detail = item.querySelector('.mz-detail');
+    detail.style.display = 'none';
+    toggle.addEventListener('click', ()=>{
+      const opening = detail.style.display === 'none';
+      document.querySelectorAll('#magazineTrendList .mz-detail').forEach(d=> d.style.display = 'none');
+      detail.style.display = opening ? 'block' : 'none';
+    });
+  });
 
   switchPanel('dashboard');
 })();
