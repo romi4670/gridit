@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GRIDIT · computerkorea</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#141F33;
+    --ink-soft:#3B4A63;
+    --paper:#EFF2ED;
+    --card:#FFFFFF;
+    --line:#D7DCD3;
+    --line-strong:#B9C0B6;
+    --blue:#E8541F;
+    --blue-soft:#FCEAE0;
+    --teal:#0F7A6C;
+    --teal-soft:#E4F1EE;
+    --amber:#B8632E;
+    --amber-soft:#F6E9DE;
+    --red:#A63D40;
+    --red-soft:#F5E3E1;
+    --signal:#5B4B8A;
+    --signal-soft:#EFEAF7;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'IBM Plex Sans KR', sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  .mono{font-family:'IBM Plex Mono', monospace;}
+  .app{
+    display:grid;
+    grid-template-columns:240px 1fr;
+    min-height:100vh;
+  }
+  /* ---------- Sidebar ---------- */
+  .sidebar{
+    background:var(--ink);
+    color:#DCE3EE;
+    padding:28px 0 20px;
+    position:sticky;
+    top:0;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+  .brand{
+    padding:0 22px 22px;
+    border-bottom:1px solid rgba(255,255,255,0.12);
+    margin-bottom:14px;
+  }
+  .brand .eyebrow{
+    font-size:11px;
+    letter-spacing:0.02em;
+    color:#8FA3C2;
+    margin-bottom:4px;
+  }
+  .brand h1{
+    font-size:20px;
+    line-height:1.3;
+    margin:0;
+    font-weight:700;
+    color:#E5383B;
+    letter-spacing:0.01em;
+  }
+  .brand .tagline{
+    font-size:11px;
+    color:#8FA3C2;
+    margin-top:4px;
+  }
+  nav{flex:1; padding:6px 10px;}
+  .nav-item{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    width:100%;
+    text-align:left;
+    background:none;
+    border:none;
+    color:#B7C2D6;
+    font-family:inherit;
+    font-size:14px;
+    padding:11px 12px;
+    border-radius:4px;
+    cursor:pointer;
+    margin-bottom:2px;
+  }
+  .nav-item .num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:#6C7FA0;
+    min-width:14px;
+  }
+  .nav-item:hover{background:rgba(255,255,255,0.06); color:#fff;}
+  .nav-item.active{
+    background:rgba(255,255,255,0.1);
+    color:#fff;
+    font-weight:600;
+  }
+  .nav-item.active .num{color:#9FD8CB;}
+  .sidebar-foot{
+    padding:14px 22px 0;
+    border-top:1px solid rgba(255,255,255,0.12);
+    font-size:11.5px;
+    color:#7488A6;
+    line-height:1.6;
+  }
+
+  /* ---------- Main ---------- */
+  .content{padding:36px 44px 80px;}
+  .panel{display:none;}
+  .panel.active{display:block; animation:fade .25s ease;}
+  @keyframes fade{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
+
+  .panel-head{margin-bottom:26px; max-width:720px;}
+  .panel-head .kicker{
+    font-size:12.5px;
+    color:var(--blue);
+    font-weight:600;
+    margin-bottom:6px;
+  }
+  .panel-head h2{
+    font-size:24px;
+    margin:0 0 8px;
+    font-weight:700;
+  }
+  .panel-head p{
+    margin:0;
+    color:var(--ink-soft);
+    font-size:14.5px;
+    line-height:1.6;
+  }
+
+  /* buttons */
+  .btn{
+    font-family:inherit;
+    font-size:13.5px;
+    font-weight:600;
+    padding:9px 16px;
+    border-radius:4px;
+    border:1px solid var(--line-strong);
+    background:var(--card);
+    color:var(--ink);
+    cursor:pointer;
+  }
+  .btn:hover{border-color:var(--ink-soft);}
+  .btn-primary{background:var(--blue); border-color:var(--blue); color:#fff;}
+  .btn-primary:hover{background:#C4430F;}
+  .btn-ghost{border-color:transparent; background:none; color:var(--blue); padding:9px 6px;}
+  .btn-danger{color:var(--red);}
+  .toolbar{display:flex; gap:10px; margin-bottom:18px; flex-wrap:wrap;}
+
+  /* card / section */
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:20px 22px;
+    margin-bottom:20px;
+  }
+  .card h3{
+    font-size:14.5px;
+    margin:0 0 14px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .card h3 .tag{
+    font-size:11px;
+    font-weight:600;
+    padding:2px 7px;
+    border-radius:10px;
+  }
+
+  /* form */
+  .form-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:12px;
+  }
+  .field{display:flex; flex-direction:column; gap:5px;}
+  .field label{font-size:12px; color:var(--ink-soft); font-weight:500;}
+  .field input, .field select{
+    font-family:inherit;
+    font-size:13.5px;
+    padding:8px 9px;
+    border:1px solid var(--line-strong);
+    border-radius:4px;
+    background:#fff;
+    color:var(--ink);
+  }
+  .field input:focus, .field select:focus{outline:2px solid var(--blue); outline-offset:1px;}
+
+  /* table */
+  table{width:100%; border-collapse:collapse; font-size:13px;}
+  thead th{
+    text-align:left;
+    font-size:11.5px;
+    font-weight:600;
+    color:var(--ink-soft);
+    padding:8px 10px;
+    border-bottom:1px solid var(--line-strong);
+    white-space:nowrap;
+  }
+  tbody td{
+    padding:9px 10px;
+    border-bottom:1px solid var(--line);
+    vertical-align:middle;
+    white-space:nowrap;
+  }
+  tbody tr:hover{background:#F7F9F5;}
+  .num-cell{font-family:'IBM Plex Mono', monospace; text-align:right;}
+  .table-scroll{overflow-x:auto;}
+  .row-del{
+    background:none; border:none; color:var(--red); cursor:pointer; font-size:12px; font-family:inherit;
+  }
+
+  /* badges */
+  .badge{
+    display:inline-block;
+    font-size:11px;
+    font-weight:600;
+    padding:3px 8px;
+    border-radius:10px;
+    white-space:nowrap;
+  }
+  .badge.ok{background:var(--teal-soft); color:var(--teal);}
+  .badge.warn{background:var(--amber-soft); color:var(--amber);}
+  .badge.bad{background:var(--red-soft); color:var(--red);}
+  .badge.neutral{background:#EEF1EA; color:var(--ink-soft);}
+
+  /* bars */
+  .bar-row{display:grid; grid-template-columns:150px 1fr 90px; align-items:center; gap:10px; padding:7px 0; border-bottom:1px solid var(--line);}
+  .bar-row:last-child{border-bottom:none;}
+  .bar-name{font-size:13px;}
+  .bar-track{background:#E7EAE3; border-radius:3px; height:9px; overflow:hidden;}
+  .bar-fill{height:100%; border-radius:3px;}
+  .bar-val{font-family:'IBM Plex Mono', monospace; font-size:12px; text-align:right; color:var(--ink-soft);}
+
+  /* stat grid (dashboard) */
+  .stat-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:20px;}
+  .stat{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-left:3px solid var(--blue);
+    border-radius:4px;
+    padding:16px 18px;
+  }
+  .stat.stat-teal{border-left-color:var(--teal);}
+  .stat.stat-amber{border-left-color:var(--amber);}
+  .stat.stat-red{border-left-color:var(--red);}
+  .stat .label{font-size:12px; color:var(--ink-soft); margin-bottom:6px;}
+  .stat .value{font-family:'IBM Plex Mono', monospace; font-size:23px; font-weight:600;}
+  .stat .sub{font-size:11.5px; color:var(--ink-soft); margin-top:4px;}
+
+  .two-col{display:grid; grid-template-columns:1.2fr 1fr; gap:20px; align-items:start;}
+  .empty{
+    padding:30px 10px;
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:13.5px;
+    border:1px dashed var(--line-strong);
+    border-radius:6px;
+  }
+
+  .strategy-item{
+    display:flex;
+    gap:14px;
+    padding:14px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .strategy-item:last-child{border-bottom:none;}
+  .strategy-num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    color:var(--blue);
+    min-width:20px;
+    font-weight:600;
+  }
+  .strategy-body h4{margin:0 0 4px; font-size:14px;}
+  .strategy-body p{margin:0; font-size:13px; color:var(--ink-soft); line-height:1.55;}
+
+  .signal-card{border-left:3px solid var(--signal); background:linear-gradient(180deg, var(--signal-soft) 0%, var(--card) 110px);}
+  .signal-chip{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    font-weight:700;
+    background:var(--signal);
+    color:#fff;
+    border-radius:3px;
+    padding:2px 6px;
+  }
+  .signal-item{border-bottom:1px solid var(--line);}
+  .signal-item:last-child{border-bottom:none;}
+  .signal-headline{
+    width:100%;
+    text-align:left;
+    background:none;
+    border:none;
+    font-family:inherit;
+    padding:14px 4px;
+    cursor:pointer;
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+  }
+  .signal-headline-num{font-family:'IBM Plex Mono', monospace; color:var(--signal); font-weight:700; font-size:13px; min-width:16px;}
+  .signal-headline-text{font-size:14.5px; font-weight:600; color:var(--ink);}
+  .signal-item.open .signal-headline-text{color:var(--signal);}
+  .signal-caret{margin-left:auto; font-size:12px; color:var(--ink-soft);}
+  .signal-detail{
+    display:none;
+    padding:0 4px 18px 32px;
+    font-size:13.5px;
+    color:var(--ink-soft);
+    line-height:1.65;
+    max-width:640px;
+  }
+  .signal-item.open .signal-detail{display:block;}
+
+  footer.note{
+    margin-top:8px;
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+
+  @media (max-width:900px){
+    .app{grid-template-columns:1fr;}
+    .sidebar{position:relative; height:auto; flex-direction:row; overflow-x:auto; padding:16px 12px;}
+    .brand{border-bottom:none; padding:0 14px 0 4px; margin-bottom:0; display:flex; flex-wrap:wrap; align-items:baseline; gap:2px 10px;}
+    .brand h1{white-space:nowrap; flex:1 0 100%;}
+    .brand .tagline{display:none;}
+    .sidebar-foot{display:none;}
+    nav{display:flex; padding:0;}
+    .nav-item{white-space:nowrap;}
+    .content{padding:24px 18px 60px;}
+    .form-grid{grid-template-columns:repeat(2,1fr);}
+    .stat-grid{grid-template-columns:repeat(2,1fr);}
+    .two-col{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="eyebrow">computerkorea</div>
+      <h1>GRIDIT</h1>
+      <div class="tagline">GRID + IT · MD 상품관리 에이전트</div>
+    </div>
+    <nav id="nav"></nav>
+    <div class="sidebar-foot">
+      데이터 입력 → 진단 리포트 4종 → 전략 제안 → 대시보드 순으로 이어지는 워크플로우입니다.
+    </div>
+  </aside>
+
+  <main class="content">
+
+    <section class="panel active" id="panel-input" data-title="데이터 입력">
+      <div class="panel-head">
+        <div class="kicker">STEP 1</div>
+        <h2>상품 데이터 입력</h2>
+        <p>등록된 상품 정보를 관리합니다. 처음 사용하신다면 샘플 데이터를 채워 바로 결과를 확인해보세요.</p>
+      </div>
+
+      <div class="toolbar">
+        <button class="btn btn-primary" id="btnSample">샘플 데이터 채우기</button>
+        <button class="btn" id="btnClear">전체 비우기</button>
+      </div>
+
+      <div class="card">
+        <h3>상품 추가</h3>
+        <div class="form-grid" id="addForm">
+          <div class="field"><label>상품명</label><input id="f_name" placeholder="예: 라이젠5-7500F"></div>
+          <div class="field" style="grid-column:span 2;"><label>키워드 (쉼표로 구분)</label><input id="f_keyword" placeholder="예: 라파엘,7500F,라이젠5-7500F,게이밍,정품"></div>
+          <div class="field"><label>카테고리</label>
+            <select id="f_category">
+              <option value="" disabled selected>선택하세요</option>
+              <option>CPU</option><option>메모리</option><option>SSD</option>
+              <option>모니터</option><option>VGA</option><option>메인보드</option>
+              <option>파워</option><option>쿨러</option><option>주변기기</option>
+            </select>
+          </div>
+          <div class="field"><label>공급사</label><input id="f_supplier" placeholder="예: AMD"></div>
+          <div class="field"><label>등록월 (YYYY-MM)</label><input id="f_date" placeholder="2025-06"></div>
+          <div class="field"><label>원가(원)</label><input id="f_cost" type="number" placeholder="0"></div>
+          <div class="field"><label>판매가(원)</label><input id="f_price" type="number" placeholder="0"></div>
+          <div class="field"><label>재고수량</label><input id="f_stock" type="number" placeholder="0"></div>
+          <div class="field"><label>월 판매량</label><input id="f_sales" type="number" placeholder="0"></div>
+          <div class="field"><label>AS 접수건수</label><input id="f_as" type="number" placeholder="0"></div>
+          <div class="field"><label>경쟁사 판매가(원)</label><input id="f_comp" type="number" placeholder="0"></div>
+        </div>
+        <div style="margin-top:14px;">
+          <button class="btn btn-primary" id="btnAdd">상품 추가</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>등록 상품 목록 <span class="tag badge neutral" id="countTag">0건</span></h3>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>상품명</th><th>키워드</th><th>카테고리</th><th>공급사</th><th>등록월</th>
+                <th>원가</th><th>판매가</th><th>재고</th><th>월판매</th><th>AS건수</th><th>경쟁사가</th><th></th>
+              </tr>
+            </thead>
+            <tbody id="productTbody"></tbody>
+          </table>
+        </div>
+        <div class="empty" id="emptyInput" style="display:none;">등록된 상품이 없습니다. 샘플 데이터를 채우거나 직접 추가해보세요.</div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-db" data-title="상품DB 정합성">
+      <div class="panel-head">
+        <div class="kicker">STEP 2 · 진단 리포트</div>
+        <h2>상품DB 정합성 리포트</h2>
+        <p>필수 필드 누락, 중복 상품명, 마진 이상 등 상품DB에 실제로 존재하는 문제를 찾아냅니다.</p>
+      </div>
+      <div class="card">
+        <h3>정합성 이슈</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>상품명</th><th>이슈 유형</th><th>내용</th><th>심각도</th></tr></thead>
+            <tbody id="dbIssueTbody"></tbody>
+          </table>
+        </div>
+        <div class="empty" id="emptyDb" style="display:none;">진단할 상품 데이터가 없습니다. 1단계에서 데이터를 먼저 입력해주세요.</div>
+      </div>
+
+      <div class="card">
+        <h3>상품명 · 키워드 정합성 분석</h3>
+        <p style="margin:-6px 0 14px; font-size:12.5px; color:var(--ink-soft);">카테고리별 표준 키워드 슬롯 기준으로 상품명과 키워드를 함께 검사하고, 정정 제안 상품명과 정정 제안 키워드를 각각 제시합니다.</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>상품명(원본)</th><th>키워드(원본)</th><th>이슈</th><th>정정 제안 상품명</th><th>정정 제안 키워드</th></tr></thead>
+            <tbody id="nameKeywordTbody"></tbody>
+          </table>
+        </div>
+        <div class="empty" id="emptyNameKeyword" style="display:none;">진단할 상품 데이터가 없습니다.</div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-sales" data-title="판매·매출 연동">
+      <div class="panel-head">
+        <div class="kicker">STEP 3 · 진단 리포트</div>
+        <h2>판매·매출 연동 리포트</h2>
+        <p>등록만 되어 있고 실제로 팔리지 않는 상품과, 매출을 견인하는 상품을 구분합니다.</p>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <h3>상품별 추정 월매출 (판매가 × 월판매량)</h3>
+          <div id="salesBars"></div>
+          <div class="empty" id="emptySalesBars" style="display:none;">데이터가 없습니다.</div>
+        </div>
+        <div class="card">
+          <h3>등록만 되고 안 팔리는 상품 <span class="tag badge warn">판매 0건</span></h3>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>상품명</th><th>등록월</th><th>재고</th></tr></thead>
+              <tbody id="deadStockTbody"></tbody>
+            </table>
+          </div>
+          <div class="empty" id="emptyDead" style="display:none;">해당 상품이 없습니다.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-stock" data-title="재고·회전율">
+      <div class="panel-head">
+        <div class="kicker">STEP 4 · 진단 리포트</div>
+        <h2>재고·회전율 리포트</h2>
+        <p>현재 판매 속도 기준으로 재고가 며칠 뒤 소진되는지 계산해, 발주 타이밍을 제안합니다.</p>
+      </div>
+      <div class="card">
+        <h3>재고 소진 예상일 (재고수량 ÷ 월판매량 × 30일)</h3>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>상품명</th><th>재고</th><th>월판매량</th><th class="num-cell">예상 소진일</th><th>발주 제안</th></tr></thead>
+            <tbody id="stockTbody"></tbody>
+          </table>
+        </div>
+        <div class="empty" id="emptyStock" style="display:none;">데이터가 없습니다.</div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-strategy" data-title="AI MD 전략">
+      <div class="panel-head">
+        <div class="kicker">STEP 5 · AI가 짚어내는 신호</div>
+        <h2>AI MD 전략</h2>
+        <p>시장·키워드 트렌드는 상품명·키워드·카테고리만으로 계산되고, 경쟁사 비교와 전략 액션 제안은 가격·재고·판매 데이터가 쌓여야 계산됩니다.</p>
+      </div>
+
+      <div class="card">
+        <h3>시장·키워드 트렌드 <span class="tag badge neutral">상품명·키워드·카테고리 기반</span></h3>
+        <p style="margin:-6px 0 14px; font-size:12.5px; color:var(--ink-soft);">등록된 상품명·키워드만으로 계산됩니다. 가격이나 판매량이 없어도 바로 확인할 수 있습니다.</p>
+        <div class="two-col">
+          <div>
+            <h4 style="font-size:12.5px; color:var(--ink-soft); margin:0 0 8px;">카테고리별 등록 비중</h4>
+            <div id="marketCatDist"></div>
+          </div>
+          <div>
+            <h4 style="font-size:12.5px; color:var(--ink-soft); margin:0 0 8px;">자주 등장하는 키워드 (2회 이상)</h4>
+            <div id="marketTokenTrend"></div>
+            <h4 style="font-size:12.5px; color:var(--ink-soft); margin:14px 0 8px;">옵션 슬롯 분포 (정품/벌크/병행수입 등)</h4>
+            <div id="marketOptionDist"></div>
+          </div>
+        </div>
+        <div class="empty" id="emptyMarket" style="display:none;">등록된 상품이 없습니다. 1단계에서 상품명·키워드·카테고리를 입력해보세요.</div>
+      </div>
+
+      <div class="card">
+        <h3>경쟁사·시장가 비교 <span class="tag badge neutral">가격·경쟁사가 데이터 기반</span></h3>
+        <p style="margin:-6px 0 14px; font-size:12.5px; color:var(--ink-soft);">동일 상품군 기준 경쟁사 판매가 대비 가격 위치를 진단합니다. 이 결과는 아래 전략 액션 제안의 근거로도 함께 쓰입니다.</p>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>상품명</th><th class="num-cell">자사가</th><th class="num-cell">경쟁사가</th><th class="num-cell">가격차</th><th>포지션</th></tr></thead>
+            <tbody id="compareTbody"></tbody>
+          </table>
+        </div>
+        <div class="empty" id="emptyCompare" style="display:none;">데이터가 없습니다.</div>
+      </div>
+
+      <div class="card signal-card">
+        <h3><span class="signal-chip">AI</span> 전략 액션 제안 <span class="tag badge neutral">가격·재고·판매 데이터 기반</span></h3>
+        <div class="toolbar" style="margin-bottom:16px;">
+          <button class="btn" id="btnDownloadStrategy">리포트 다운로드</button>
+        </div>
+        <div id="strategyList"></div>
+        <div class="empty" id="emptyStrategy" style="display:none;">제안할 근거 데이터가 없습니다.</div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-dashboard" data-title="대시보드">
+      <div class="panel-head">
+        <div class="kicker">STEP 6</div>
+        <h2>전체 현황 대시보드</h2>
+        <p>전체 상품군의 현재 상태를 한 화면에서 확인합니다.</p>
+      </div>
+      <div class="stat-grid" id="statGrid"></div>
+      <div class="two-col">
+        <div class="card">
+          <h3>매출 상위 5개</h3>
+          <div id="topSellers"></div>
+        </div>
+        <div class="card">
+          <h3>리스크 상품 <span class="tag badge bad" id="riskCountTag">0건</span></h3>
+          <div id="riskList"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+(function(){
+
+  // ---------------- state ----------------
+  let products = [];
+  let uidCounter = 1;
+
+  const panels = [
+    {id:'input', label:'데이터 입력'},
+    {id:'db', label:'DB 정합성'},
+    {id:'sales', label:'판매·매출'},
+    {id:'stock', label:'재고·회전율'},
+    {id:'strategy', label:'AI MD 전략'},
+    {id:'dashboard', label:'대시보드'},
+  ];
+
+  // ---------------- nav ----------------
+  const nav = document.getElementById('nav');
+  panels.forEach((p, i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'nav-item' + (i===0 ? ' active' : '');
+    btn.dataset.target = p.id;
+    btn.innerHTML = '<span class="num">'+(i+1)+'</span><span>'+p.label+'</span>';
+    btn.addEventListener('click', ()=> switchPanel(p.id));
+    nav.appendChild(btn);
+  });
+
+  function switchPanel(id){
+    document.querySelectorAll('.panel').forEach(el=> el.classList.toggle('active', el.id === 'panel-'+id));
+    document.querySelectorAll('.nav-item').forEach(el=> el.classList.toggle('active', el.dataset.target === id));
+    renderAll();
+  }
+
+  // ---------------- sample data ----------------
+  function sampleData(){
+    return [
+      {name:'라이젠5-7500F', keyword:'라파엘,7500F,라이젠5-7500F,게이밍,정품', category:'CPU', supplier:'AMD', date:'2024-11', cost:165000, price:189000, stock:42, sales:38, as:1, comp:185000},
+      {name:'라이젠7-8700G', keyword:'피닉스,8700G,라이젠7-8700G,사무용,신품', category:'CPU', supplier:'AMD', date:'2025-02', cost:285000, price:329000, stock:15, sales:9, as:0, comp:339000},
+      {name:'DDR5-32GB-6000', keyword:'마이크론,DDR5,32GB,6000MHz-CL36,데스크탑용', category:'메모리', supplier:'마이크론', date:'2024-08', cost:88000, price:99000, stock:130, sales:65, as:2, comp:97000},
+      {name:'DDR4-16GB-3200', keyword:'삼성전자,DDR4,16GB,3200MHz,노트북용,중고', category:'메모리', supplier:'삼성전자', date:'2023-05', cost:32000, price:38000, stock:6, sales:3, as:0, comp:36000},
+      {name:'NVMe-1TB-Gen4', keyword:'마이크론,NVMe-1TB,Gen4,고성능', category:'SSD', supplier:'마이크론', date:'2024-12', cost:62000, price:74000, stock:200, sales:110, as:5, comp:71000},
+      {name:'SATA-500GB', keyword:'', category:'SSD', supplier:'ADATA', date:'2022-03', cost:28000, price:34000, stock:4, sales:0, as:0, comp:31000},
+      {name:'27인치-QHD-165Hz', keyword:'ASUS,27인치QHD,165Hz,게이밍,정품', category:'모니터', supplier:'ASUS', date:'2025-01', cost:210000, price:259000, stock:22, sales:18, as:1, comp:269000},
+      {name:'24인치-FHD-75Hz', keyword:'LG전자,24인치FHD,75Hz', category:'모니터', supplier:'LG전자', date:'2024-06', cost:95000, price:119000, stock:3, sales:12, as:0, comp:115000},
+      {name:'24인치-FHD-75Hz', keyword:'24인치FHD,75Hz,미러상품,여분,추가,과다', category:'모니터', supplier:'', date:'2024-06', cost:94000, price:0, stock:8, sales:0, as:0, comp:115000},
+      {name:'RTX4060-8GB', keyword:'ASUS,RTX4060,8GB,게이밍', category:'VGA', supplier:'ASUS', date:'2024-09', cost:385000, price:449000, stock:9, sales:14, as:2, comp:439000},
+      {name:'RTX4070Ti-12GB', keyword:'MSI,RTX4070Ti,12GB,고사양,정품', category:'VGA', supplier:'MSI', date:'2024-10', cost:780000, price:899000, stock:18, sales:5, as:1, comp:869000},
+      {name:'B650-메인보드', keyword:'ASUS,B650', category:'메인보드', supplier:'ASUS', date:'2025-03', cost:145000, price:169000, stock:27, sales:20, as:0, comp:175000},
+      {name:'700W-80PLUS골드', keyword:'마이크로닉스,700W,80PLUS골드,정격', category:'파워', supplier:'마이크로닉스', date:'2024-07', cost:58000, price:69000, stock:55, sales:30, as:0, comp:67000},
+      {name:'수랭쿨러-240mm', keyword:'NZXT,240mm,수랭,RGB,정품,고급형', category:'쿨러', supplier:'NZXT', date:'2024-04', cost:98000, price:105000, stock:11, sales:4, as:3, comp:109000},
+    ];
+  }
+
+  function addProduct(p){
+    p.id = uidCounter++;
+    products.push(p);
+  }
+
+  // 실습 샘플: 한빛정밀 RFP 건 - 사무용PC 1개 SKU를 초기 데이터로 주입
+  addProduct({
+    name:'사무용PC-i5-14세대-24인치모니터포함',
+    keyword:'테크메이트파트너스,i5-14세대-16GB-SSD512GB,사무용,대량키팅프로모션',
+    category:'주변기기',
+    supplier:'테크메이트파트너스',
+    date:'2026-03',
+    cost:0,
+    price:1194000,
+    stock:540,
+    sales:360,
+    as:0,
+    comp:890000,
+  });
+
+  document.getElementById('btnSample').addEventListener('click', ()=>{
+    products = [];
+    sampleData().forEach(addProduct);
+    renderAll();
+  });
+  document.getElementById('btnClear').addEventListener('click', ()=>{
+    if(products.length===0) return;
+    if(confirm('등록된 상품 '+products.length+'건을 모두 삭제할까요?')){
+      products = [];
+      renderAll();
+    }
+  });
+
+  document.getElementById('btnAdd').addEventListener('click', ()=>{
+    const name = document.getElementById('f_name').value.trim();
+    if(!name){ alert('상품명을 입력해주세요.'); return; }
+    const category = document.getElementById('f_category').value;
+    if(!category){ alert('카테고리를 선택해주세요.'); return; }
+    addProduct({
+      name: name,
+      keyword: document.getElementById('f_keyword').value.trim(),
+      category: category,
+      supplier: document.getElementById('f_supplier').value.trim(),
+      date: document.getElementById('f_date').value.trim() || '-',
+      cost: Number(document.getElementById('f_cost').value)||0,
+      price: Number(document.getElementById('f_price').value)||0,
+      stock: Number(document.getElementById('f_stock').value)||0,
+      sales: Number(document.getElementById('f_sales').value)||0,
+      as: Number(document.getElementById('f_as').value)||0,
+      comp: Number(document.getElementById('f_comp').value)||0,
+    });
+    ['f_name','f_keyword','f_supplier','f_date','f_cost','f_price','f_stock','f_sales','f_as','f_comp'].forEach(id=>{
+      document.getElementById(id).value = '';
+    });
+    renderAll();
+  });
+
+  function removeProduct(id){
+    products = products.filter(p=> p.id !== id);
+    renderAll();
+  }
+
+  // ---------------- helpers ----------------
+  const won = n => Number(n||0).toLocaleString('ko-KR') + '원';
+  const num = n => Number(n||0).toLocaleString('ko-KR');
+
+  // ---------------- 카테고리별 키워드 슬롯 규격 ----------------
+  const OPTION_SET = ['저가형','벌크','병행수입','정품','쿨러','중고'];
+  const categoryRules = {
+    'CPU': {slots:['코드네임','모델번호','영문모델명','용도어','옵션(저가형/벌크/병행수입/정품/쿨러/중고 중 택1)'], min:5, max:5, optionSlot:true},
+    '메모리': {slots:['제조사','DDR타입','용량','속도(MHz)/CL','용도','특성1(선택)','특성2(선택)'], min:5, max:7, optionSlot:false},
+  };
+  const DEFAULT_RULE = {slots:['모델명/제조사','핵심스펙','용도','옵션(선택)'], min:3, max:5, optionSlot:false};
+  function ruleFor(category){ return categoryRules[category] || DEFAULT_RULE; }
+  function tokenize(keyword){ return String(keyword||'').split(',').map(t=>t.trim()).filter(Boolean); }
+
+  function analyzeNameKeyword(p){
+    const rule = ruleFor(p.category);
+    const tokens = tokenize(p.keyword);
+    const issues = [];
+
+    if(!tokens.length){
+      issues.push('키워드 미입력');
+    } else {
+      if(tokens.length < rule.min) issues.push('키워드 슬롯 부족 (표준 '+rule.min+'~'+rule.max+'개, 실제 '+tokens.length+'개)');
+      if(tokens.length > rule.max) issues.push('키워드 슬롯 과다 (표준 '+rule.min+'~'+rule.max+'개, 실제 '+tokens.length+'개)');
+      if(rule.optionSlot){
+        const last = tokens[tokens.length-1];
+        if(last && !OPTION_SET.includes(last)) issues.push('마지막 슬롯 값이 표준 옵션('+OPTION_SET.join('/')+')이 아님: "'+last+'"');
+      }
+      const lname = String(p.name||'').toLowerCase();
+      const hasMatch = tokens.some(t=> t.length>=2 && lname.includes(t.toLowerCase()));
+      if(!hasMatch) issues.push('상품명에 키워드가 전혀 반영되지 않음');
+    }
+
+    // 정정 제안 키워드
+    let suggestKeyword;
+    if(!tokens.length){
+      suggestKeyword = rule.slots.map(s=>'['+s+' 입력]').join(',');
+    } else {
+      const padded = rule.slots.map((slot, i)=>{
+        if(i < tokens.length && tokens[i]) {
+          if(rule.optionSlot && i === rule.slots.length-1 && !OPTION_SET.includes(tokens[i])){
+            return '['+slot+' 확인필요]';
+          }
+          return tokens[i];
+        }
+        if(i < tokens.length) return tokens[i];
+        return '['+slot+' 확인필요]';
+      });
+      // 슬롯 과다인 경우 초과분도 뒤에 붙여서 보여줌(삭제 여부는 사람이 판단)
+      const extra = tokens.slice(rule.slots.length);
+      suggestKeyword = padded.concat(extra.length ? ['(초과:'+extra.join('/')+')'] : []).join(',');
+    }
+
+    // 정정 제안 상품명: 원본 정리 + 키워드 중 이름에 없는 핵심어 보완
+    let base = String(p.name||'').replace(/\s+/g,' ').trim();
+    const missing = tokens.filter(t=> t.length>=2 && !base.toLowerCase().includes(t.toLowerCase()) && !OPTION_SET.includes(t));
+    let suggestName = missing.length ? (base+' '+missing.slice(0,2).join(' ')).replace(/\s+/g,' ').trim() : base;
+
+    return {issues, suggestKeyword, suggestName, ruleLabel: rule.slots.join(' · ')};
+  }
+
+  // ---------------- render: input table ----------------
+  function renderInputTable(){
+    const tbody = document.getElementById('productTbody');
+    tbody.innerHTML = '';
+    document.getElementById('countTag').textContent = products.length + '건';
+    document.getElementById('emptyInput').style.display = products.length ? 'none' : 'block';
+    products.forEach(p=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td>'+escapeHtml(p.name)+'</td>'+
+        '<td>'+(p.keyword ? escapeHtml(p.keyword) : '<span class="badge bad">누락</span>')+'</td>'+
+        '<td>'+escapeHtml(p.category)+'</td>'+
+        '<td>'+(p.supplier ? escapeHtml(p.supplier) : '<span class="badge bad">누락</span>')+'</td>'+
+        '<td class="mono">'+escapeHtml(p.date)+'</td>'+
+        '<td class="num-cell">'+num(p.cost)+'</td>'+
+        '<td class="num-cell">'+(p.price ? num(p.price) : '<span class="badge bad">누락</span>')+'</td>'+
+        '<td class="num-cell">'+num(p.stock)+'</td>'+
+        '<td class="num-cell">'+num(p.sales)+'</td>'+
+        '<td class="num-cell">'+num(p.as)+'</td>'+
+        '<td class="num-cell">'+num(p.comp)+'</td>'+
+        '<td><button class="row-del" data-id="'+p.id+'">삭제</button></td>';
+      tbody.appendChild(tr);
+    });
+    tbody.querySelectorAll('.row-del').forEach(btn=>{
+      btn.addEventListener('click', ()=> removeProduct(Number(btn.dataset.id)));
+    });
+  }
+
+  function escapeHtml(s){
+    return String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  // ---------------- diagnostics: DB integrity ----------------
+  function computeDbIssues(){
+    const issues = [];
+    const nameCount = {};
+    products.forEach(p=> nameCount[p.name] = (nameCount[p.name]||0)+1);
+
+    products.forEach(p=>{
+      if(!p.supplier) issues.push({name:p.name, type:'필수필드 누락', detail:'공급사 정보가 비어 있습니다.', sev:'bad'});
+      if(!p.price) issues.push({name:p.name, type:'필수필드 누락', detail:'판매가가 등록되어 있지 않습니다.', sev:'bad'});
+      if(p.price && p.cost && p.price <= p.cost) issues.push({name:p.name, type:'마진 이상', detail:'판매가('+num(p.price)+')가 원가('+num(p.cost)+') 이하입니다.', sev:'bad'});
+      if(nameCount[p.name] > 1) issues.push({name:p.name, type:'중복 상품명', detail:'동일한 상품명이 '+nameCount[p.name]+'건 등록되어 있습니다.', sev:'warn'});
+      if(p.stock === 0 && p.sales > 0) issues.push({name:p.name, type:'재고 불일치', detail:'재고는 0인데 판매량이 발생했습니다. 재고 데이터를 확인하세요.', sev:'warn'});
+    });
+    return issues;
+  }
+
+  function renderDbPanel(){
+    const tbody = document.getElementById('dbIssueTbody');
+    tbody.innerHTML = '';
+    const issues = computeDbIssues();
+    document.getElementById('emptyDb').style.display = products.length ? 'none' : 'block';
+    if(products.length){
+      if(!issues.length){
+        tbody.innerHTML = '<tr><td colspan="4" style="color:var(--teal); font-weight:600;">발견된 정합성 이슈가 없습니다.</td></tr>';
+      } else {
+        issues.forEach(is=>{
+          const tr = document.createElement('tr');
+          tr.innerHTML =
+            '<td>'+escapeHtml(is.name)+'</td>'+
+            '<td>'+escapeHtml(is.type)+'</td>'+
+            '<td>'+escapeHtml(is.detail)+'</td>'+
+            '<td><span class="badge '+is.sev+'">'+(is.sev==='bad'?'높음':'주의')+'</span></td>';
+          tbody.appendChild(tr);
+        });
+      }
+    }
+    renderNameKeywordTable();
+  }
+
+  function renderNameKeywordTable(){
+    const tbody = document.getElementById('nameKeywordTbody');
+    tbody.innerHTML = '';
+    document.getElementById('emptyNameKeyword').style.display = products.length ? 'none' : 'block';
+    products.forEach(p=>{
+      const r = analyzeNameKeyword(p);
+      const tr = document.createElement('tr');
+      const issueHtml = r.issues.length
+        ? r.issues.map(i=>'<span class="badge warn" style="display:block; margin-bottom:3px; white-space:normal;">'+escapeHtml(i)+'</span>').join('')
+        : '<span class="badge ok">이상없음</span>';
+      tr.innerHTML =
+        '<td>'+escapeHtml(p.name)+'</td>'+
+        '<td>'+(p.keyword ? escapeHtml(p.keyword) : '<span class="badge bad">없음</span>')+'</td>'+
+        '<td style="white-space:normal; min-width:200px;">'+issueHtml+'</td>'+
+        '<td style="white-space:normal; min-width:180px;">'+(r.issues.length ? escapeHtml(r.suggestName) : '-')+'</td>'+
+        '<td style="white-space:normal; min-width:200px;" class="mono">'+(r.issues.length ? escapeHtml(r.suggestKeyword) : '-')+'</td>';
+      tbody.appendChild(tr);
+    });
+  }
+
+  // ---------------- diagnostics: sales/revenue ----------------
+  function computeRevenue(p){ return (p.price||0) * (p.sales||0); }
+
+  function renderSalesPanel(){
+    const withRevenue = products.map(p=> ({p, rev: computeRevenue(p)})).sort((a,b)=> b.rev - a.rev);
+    const barsEl = document.getElementById('salesBars');
+    barsEl.innerHTML = '';
+    document.getElementById('emptySalesBars').style.display = products.length ? 'none' : 'block';
+    const maxRev = Math.max(1, ...withRevenue.map(x=>x.rev));
+    withRevenue.forEach(x=>{
+      const pct = Math.round((x.rev / maxRev) * 100);
+      const color = x.rev === 0 ? 'var(--red)' : (pct > 60 ? 'var(--teal)' : 'var(--blue)');
+      const row = document.createElement('div');
+      row.className = 'bar-row';
+      row.innerHTML =
+        '<div class="bar-name">'+escapeHtml(x.p.name)+'</div>'+
+        '<div class="bar-track"><div class="bar-fill" style="width:'+pct+'%; background:'+color+';"></div></div>'+
+        '<div class="bar-val">'+won(x.rev)+'</div>';
+      barsEl.appendChild(row);
+    });
+
+    const dead = products.filter(p=> p.sales === 0);
+    const deadTbody = document.getElementById('deadStockTbody');
+    deadTbody.innerHTML = '';
+    document.getElementById('emptyDead').style.display = dead.length ? 'none' : 'block';
+    dead.forEach(p=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = '<td>'+escapeHtml(p.name)+'</td><td class="mono">'+escapeHtml(p.date)+'</td><td class="num-cell">'+num(p.stock)+'</td>';
+      deadTbody.appendChild(tr);
+    });
+  }
+
+  // ---------------- diagnostics: stock turnover ----------------
+  function turnoverDays(p){
+    if(!p.sales) return Infinity;
+    return Math.round((p.stock / p.sales) * 30);
+  }
+
+  function renderStockPanel(){
+    const tbody = document.getElementById('stockTbody');
+    tbody.innerHTML = '';
+    document.getElementById('emptyStock').style.display = products.length ? 'none' : 'block';
+    const rows = products.map(p=> ({p, days: turnoverDays(p)})).sort((a,b)=> a.days - b.days);
+    rows.forEach(x=>{
+      const days = x.days;
+      let badge, suggestion;
+      if(days === Infinity){
+        badge = '<span class="badge neutral">판매없음</span>';
+        suggestion = '판매 재개 여부 검토';
+      } else if(days <= 14){
+        badge = '<span class="badge bad">'+days+'일</span>';
+        suggestion = '긴급 발주 필요';
+      } else if(days <= 45){
+        badge = '<span class="badge warn">'+days+'일</span>';
+        suggestion = '발주 준비 권장';
+      } else {
+        badge = '<span class="badge ok">'+days+'일</span>';
+        suggestion = '여유 있음';
+      }
+      const tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td>'+escapeHtml(x.p.name)+'</td>'+
+        '<td class="num-cell">'+num(x.p.stock)+'</td>'+
+        '<td class="num-cell">'+num(x.p.sales)+'</td>'+
+        '<td class="num-cell">'+badge+'</td>'+
+        '<td>'+suggestion+'</td>';
+      tbody.appendChild(tr);
+    });
+  }
+
+  // ---------------- diagnostics: competitor price ----------------
+  function priceGapPct(p){
+    if(!p.comp) return null;
+    return Math.round(((p.price - p.comp) / p.comp) * 1000) / 10;
+  }
+
+  function renderComparePanel(){
+    const tbody = document.getElementById('compareTbody');
+    tbody.innerHTML = '';
+    document.getElementById('emptyCompare').style.display = products.length ? 'none' : 'block';
+    products.forEach(p=>{
+      const gap = priceGapPct(p);
+      let posBadge;
+      if(gap === null) posBadge = '<span class="badge neutral">비교불가</span>';
+      else if(gap <= -3) posBadge = '<span class="badge ok">가격 우위</span>';
+      else if(gap >= 3) posBadge = '<span class="badge bad">가격 열위</span>';
+      else posBadge = '<span class="badge neutral">동등 수준</span>';
+      const tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td>'+escapeHtml(p.name)+'</td>'+
+        '<td class="num-cell">'+num(p.price)+'</td>'+
+        '<td class="num-cell">'+num(p.comp)+'</td>'+
+        '<td class="num-cell">'+(gap===null?'-':(gap>0?'+':'')+gap+'%')+'</td>'+
+        '<td>'+posBadge+'</td>';
+      tbody.appendChild(tr);
+    });
+  }
+
+  // ---------------- 시장·키워드 트렌드 (상품명·키워드·카테고리만으로 계산) ----------------
+  function computeMarketTrends(){
+    const catCount = {};
+    products.forEach(p=> catCount[p.category] = (catCount[p.category]||0)+1);
+    const total = products.length;
+    const catDist = Object.entries(catCount).sort((a,b)=>b[1]-a[1]).map(([cat,count])=>({cat,count,pct: total? Math.round(count/total*100):0}));
+
+    const tokenFreq = {};
+    products.forEach(p=>{
+      tokenize(p.keyword).forEach(t=>{
+        if(OPTION_SET.includes(t)) return;
+        tokenFreq[t] = (tokenFreq[t]||0)+1;
+      });
+    });
+    const trendTokens = Object.entries(tokenFreq).filter(([,c])=>c>=2).sort((a,b)=>b[1]-a[1]).slice(0,6);
+
+    const optionFreq = {};
+    products.forEach(p=>{
+      tokenize(p.keyword).forEach(t=>{
+        if(OPTION_SET.includes(t)) optionFreq[t] = (optionFreq[t]||0)+1;
+      });
+    });
+    const optionDist = Object.entries(optionFreq).sort((a,b)=>b[1]-a[1]);
+
+    return {catDist, trendTokens, optionDist, total};
+  }
+
+  function renderMarketTrends(){
+    document.getElementById('emptyMarket').style.display = products.length ? 'none' : 'block';
+    const catEl = document.getElementById('marketCatDist');
+    const tokenEl = document.getElementById('marketTokenTrend');
+    const optEl = document.getElementById('marketOptionDist');
+    catEl.innerHTML = ''; tokenEl.innerHTML = ''; optEl.innerHTML = '';
+    if(!products.length) return;
+
+    const {catDist, trendTokens, optionDist} = computeMarketTrends();
+    const maxCat = Math.max(1, ...catDist.map(x=>x.count));
+    catDist.forEach(x=>{
+      const pct = Math.round((x.count/maxCat)*100);
+      const row = document.createElement('div');
+      row.className = 'bar-row';
+      row.innerHTML =
+        '<div class="bar-name">'+escapeHtml(x.cat)+'</div>'+
+        '<div class="bar-track"><div class="bar-fill" style="width:'+pct+'%; background:var(--blue);"></div></div>'+
+        '<div class="bar-val">'+x.count+'건 ('+x.pct+'%)</div>';
+      catEl.appendChild(row);
+    });
+
+    if(!trendTokens.length){
+      tokenEl.innerHTML = '<div class="empty" style="padding:14px;">2회 이상 반복되는 키워드가 아직 없습니다.</div>';
+    } else {
+      const maxTok = Math.max(...trendTokens.map(([,c])=>c));
+      trendTokens.forEach(([t,c])=>{
+        const pct = Math.round((c/maxTok)*100);
+        const row = document.createElement('div');
+        row.className = 'bar-row';
+        row.innerHTML =
+          '<div class="bar-name">'+escapeHtml(t)+'</div>'+
+          '<div class="bar-track"><div class="bar-fill" style="width:'+pct+'%; background:var(--signal);"></div></div>'+
+          '<div class="bar-val">'+c+'건</div>';
+        tokenEl.appendChild(row);
+      });
+    }
+
+    if(!optionDist.length){
+      optEl.innerHTML = '<div class="empty" style="padding:14px;">옵션 슬롯(정품/벌크/병행수입 등) 데이터가 없습니다.</div>';
+    } else {
+      const maxOpt = Math.max(...optionDist.map(([,c])=>c));
+      optionDist.forEach(([t,c])=>{
+        const pct = Math.round((c/maxOpt)*100);
+        const row = document.createElement('div');
+        row.className = 'bar-row';
+        row.innerHTML =
+          '<div class="bar-name">'+escapeHtml(t)+'</div>'+
+          '<div class="bar-track"><div class="bar-fill" style="width:'+pct+'%; background:var(--teal);"></div></div>'+
+          '<div class="bar-val">'+c+'건</div>';
+        optEl.appendChild(row);
+      });
+    }
+  }
+
+  // ---------------- AI MD 전략 (시장추이 기반 신호 탐지) ----------------
+  function hasFullData(){
+    return products.some(p=> p.price>0 || p.cost>0 || p.stock>0 || p.sales>0 || p.as>0 || p.comp>0);
+  }
+  function computeAiMdStrategy(){
+    const used = new Set();
+    const candidates = [];
+    const byCategory = {};
+    products.forEach(p=>{ (byCategory[p.category] ||= []).push(p); });
+
+    // 신호 1: 가격은 이기고 있는데 회전이 느려 노출이 부족해 보이는 상품
+    const quietWinners = products.filter(p=>{
+      const gap = priceGapPct(p), days = turnoverDays(p);
+      return gap !== null && gap <= -3 && days !== Infinity && days > 45 && p.sales > 0;
+    });
+    if(quietWinners.length){
+      quietWinners.forEach(p=>used.add(p.name));
+      const names = quietWinners.slice(0,3).map(p=>p.name).join(', ');
+      candidates.push({
+        headline: '가격은 이기고 있는데 노출이 부족해 보이는 상품이 있습니다',
+        detail: names+' 등 '+quietWinners.length+'개 상품은 경쟁사보다 판매가가 낮은데도 재고 회전이 평균보다 느립니다. 가격표만 보면 "잘하고 있는 상품"으로 보이지만, 실제로는 진열·노출 순위에서 밀려 있을 가능성이 있습니다. 가격을 더 낮추지 않고도 노출 우선순위나 프로모션 배치만 바꿔서 매출을 끌어올릴 여지가 있습니다.'
+      });
+    }
+
+    // 신호 2: 같은 카테고리 평균 대비 AS가 튀는 상품 (매출 지표엔 아직 안 보이는 리스크)
+    let asOutlier = null, asOutlierRatio = 0;
+    Object.entries(byCategory).forEach(([cat, list])=>{
+      if(list.length < 2) return;
+      const avgAs = list.reduce((s,p)=>s+p.as,0) / list.length;
+      list.forEach(p=>{
+        if(avgAs > 0 && p.as >= 2 && p.as / avgAs > asOutlierRatio && p.as > avgAs){
+          asOutlierRatio = p.as/avgAs; asOutlier = {p, avgAs, cat};
+        } else if(avgAs === 0 && p.as >= 2 && !asOutlier){
+          asOutlier = {p, avgAs, cat};
+        }
+      });
+    });
+    if(asOutlier && !used.has(asOutlier.p.name)){
+      used.add(asOutlier.p.name);
+      candidates.push({
+        headline: '「'+asOutlier.p.name+'」의 AS 접수가 같은 카테고리 평균보다 눈에 띄게 높습니다',
+        detail: asOutlier.cat+' 카테고리 평균 AS 접수는 '+asOutlier.avgAs.toFixed(1)+'건인데, 이 상품은 '+asOutlier.p.as+'건입니다. 지금은 판매량이 버티고 있어 매출 리포트만 보면 드러나지 않지만, 품질 신호가 먼저 나타난 경우일 수 있습니다. 판매가 꺾이기 전에 소싱처 점검이나 재고 조정을 검토해볼 시점입니다.'
+      });
+    }
+
+    // 신호 3: 매출이 한 카테고리에 쏠려 있는 구조적 리스크
+    const catRevenue = {};
+    products.forEach(p=>{ catRevenue[p.category] = (catRevenue[p.category]||0) + computeRevenue(p); });
+    const totalRevenue = Object.values(catRevenue).reduce((a,b)=>a+b,0);
+    if(totalRevenue > 0){
+      const [topCat, topRev] = Object.entries(catRevenue).sort((a,b)=>b[1]-a[1])[0];
+      const share = Math.round((topRev/totalRevenue)*100);
+      if(share >= 35){
+        candidates.push({
+          headline: '추정 매출의 '+share+'%가 \''+topCat+'\' 한 카테고리에 몰려 있습니다',
+          detail: '현재 등록된 '+byCategory[topCat].length+'개 \''+topCat+'\' 상품이 전체 추정 매출의 '+share+'%를 차지합니다. 개별 상품 성과는 각각 괜찮아 보여도, 이 카테고리에 공급 이슈나 가격 경쟁이 생기면 전체 실적이 함께 흔들립니다. 다른 카테고리 라인업 확대나 대체 공급사 확보를 함께 검토해보세요.'
+        });
+      }
+    }
+
+    // 신호 4 (보강용): 재고가 과도하게 묶여 있는 상품
+    if(candidates.length < 3){
+      const overstock = products
+        .filter(p=> !used.has(p.name) && turnoverDays(p) !== Infinity && turnoverDays(p) > 90)
+        .sort((a,b)=> turnoverDays(b) - turnoverDays(a))[0];
+      if(overstock){
+        candidates.push({
+          headline: '「'+overstock.name+'」에 자금이 오래 묶여 있습니다',
+          detail: '현재 판매 속도로는 재고 소진까지 약 '+turnoverDays(overstock)+'일이 걸립니다. 매입 자금이 장기간 묶이는 상품이라, 묶음 프로모션이나 발주량 조정으로 회전 속도를 앞당길 필요가 있습니다.'
+        });
+      }
+    }
+
+    // 신호 5 (보강용): 마진이 가장 얇은 상품
+    if(candidates.length < 3){
+      const priced = products.filter(p=> !used.has(p.name) && p.price > 0);
+      if(priced.length){
+        const thin = priced.slice().sort((a,b)=>{
+          const ma = (a.price-a.cost)/a.price, mb = (b.price-b.cost)/b.price;
+          return ma - mb;
+        })[0];
+        const margin = Math.round(((thin.price-thin.cost)/thin.price)*100);
+        candidates.push({
+          headline: '「'+thin.name+'」의 마진이 등록 상품 중 가장 얇습니다',
+          detail: '판매가 대비 마진율이 약 '+margin+'%로, 판매량이 늘어나도 수익 기여는 크지 않은 구조입니다. 원가 재협상이나 판매가 조정 여지가 있는지 확인해보세요.'
+        });
+      }
+    }
+
+    return candidates.slice(0,3);
+  }
+
+  function renderStrategyPanel(){
+    const list = document.getElementById('strategyList');
+    list.innerHTML = '';
+    document.getElementById('emptyStrategy').style.display = 'none';
+
+    if(!products.length){
+      document.getElementById('emptyStrategy').style.display = 'block';
+      document.getElementById('emptyStrategy').textContent = '제안할 근거 데이터가 없습니다.';
+      return;
+    }
+    if(!hasFullData()){
+      document.getElementById('emptyStrategy').style.display = 'block';
+      document.getElementById('emptyStrategy').textContent = '아직 가격·재고·판매량·AS·경쟁사가 데이터가 없어 전략 신호를 계산할 수 없습니다. 1단계에서 해당 항목을 입력하면 자동으로 분석됩니다.';
+      return;
+    }
+
+    const top = computeAiMdStrategy();
+    if(!top.length){
+      list.innerHTML = '<div class="empty">현재 데이터 기준으로는 뚜렷한 신호가 발견되지 않았습니다. 안정적인 상태입니다.</div>';
+      return;
+    }
+    top.forEach((it, i)=>{
+      const row = document.createElement('div');
+      row.className = 'signal-item';
+      row.innerHTML =
+        '<button class="signal-headline" data-idx="'+i+'">'+
+          '<span class="signal-headline-num">'+(i+1)+'</span>'+
+          '<span class="signal-headline-text">'+escapeHtml(it.headline)+'</span>'+
+          '<span class="signal-caret">자세히 보기 ▾</span>'+
+        '</button>'+
+        '<div class="signal-detail">'+escapeHtml(it.detail)+'</div>';
+      list.appendChild(row);
+    });
+    list.querySelectorAll('.signal-headline').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const item = btn.closest('.signal-item');
+        const wasOpen = item.classList.contains('open');
+        list.querySelectorAll('.signal-item').forEach(el=> el.classList.remove('open'));
+        if(!wasOpen){
+          item.classList.add('open');
+          setTimeout(()=> item.scrollIntoView({behavior:'smooth', block:'center'}), 30);
+        }
+      });
+    });
+  }
+
+  document.getElementById('btnDownloadStrategy').addEventListener('click', ()=>{
+    const top = computeAiMdStrategy();
+    if(!top.length){ alert('다운로드할 제안이 없습니다. 먼저 상품 데이터를 입력해주세요.'); return; }
+    let content = 'AI MD 전략 리포트\n생성일: '+new Date().toLocaleString('ko-KR')+'\n\n';
+    top.forEach((it,i)=>{ content += (i+1)+'. '+it.headline+'\n'+it.detail+'\n\n'; });
+    const blob = new Blob([content], {type:'text/plain;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'AI_MD_전략_리포트.txt';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  // ---------------- dashboard ----------------
+  function renderDashboard(){
+    const grid = document.getElementById('statGrid');
+    grid.innerHTML = '';
+    const totalRevenue = products.reduce((s,p)=> s + computeRevenue(p), 0);
+    const issues = computeDbIssues();
+    const riskProducts = products.filter(p=>{
+      const days = turnoverDays(p);
+      return (days !== Infinity && days <= 14) || p.as >= 3;
+    });
+
+    const stats = [
+      {label:'등록 상품 수', value: num(products.length)+'건', cls:''},
+      {label:'추정 월매출 합계', value: won(totalRevenue), cls:'stat-teal'},
+      {label:'DB 정합성 이슈', value: num(issues.length)+'건', cls: issues.length ? 'stat-amber' : ''},
+      {label:'리스크 상품', value: num(riskProducts.length)+'건', cls: riskProducts.length ? 'stat-red' : ''},
+    ];
+    stats.forEach(s=>{
+      const div = document.createElement('div');
+      div.className = 'stat ' + s.cls;
+      div.innerHTML = '<div class="label">'+s.label+'</div><div class="value">'+s.value+'</div>';
+      grid.appendChild(div);
+    });
+
+    const top5 = products.map(p=>({p, rev: computeRevenue(p)})).sort((a,b)=>b.rev-a.rev).slice(0,5);
+    const topEl = document.getElementById('topSellers');
+    topEl.innerHTML = '';
+    if(!top5.length){ topEl.innerHTML = '<div class="empty">데이터가 없습니다.</div>'; }
+    const maxTop = Math.max(1, ...top5.map(x=>x.rev));
+    top5.forEach(x=>{
+      const pct = Math.round((x.rev/maxTop)*100);
+      const row = document.createElement('div');
+      row.className = 'bar-row';
+      row.innerHTML =
+        '<div class="bar-name">'+escapeHtml(x.p.name)+'</div>'+
+        '<div class="bar-track"><div class="bar-fill" style="width:'+pct+'%; background:var(--teal);"></div></div>'+
+        '<div class="bar-val">'+won(x.rev)+'</div>';
+      topEl.appendChild(row);
+    });
+
+    document.getElementById('riskCountTag').textContent = riskProducts.length + '건';
+    const riskEl = document.getElementById('riskList');
+    riskEl.innerHTML = '';
+    if(!riskProducts.length){
+      riskEl.innerHTML = '<div class="empty">현재 리스크로 분류된 상품이 없습니다.</div>';
+    } else {
+      riskProducts.forEach(p=>{
+        const days = turnoverDays(p);
+        const reasons = [];
+        if(days !== Infinity && days <= 14) reasons.push('재고 소진 임박('+days+'일)');
+        if(p.as >= 3) reasons.push('AS 접수 '+p.as+'건');
+        const row = document.createElement('div');
+        row.className = 'strategy-item';
+        row.innerHTML = '<div class="strategy-num" style="color:var(--red);">·</div><div class="strategy-body"><h4>'+escapeHtml(p.name)+'</h4><p>'+reasons.join(' · ')+'</p></div>';
+        riskEl.appendChild(row);
+      });
+    }
+  }
+
+  // ---------------- render all ----------------
+  function renderAll(){
+    renderInputTable();
+    renderDbPanel();
+    renderSalesPanel();
+    renderStockPanel();
+    renderComparePanel();
+    renderMarketTrends();
+    renderStrategyPanel();
+    renderDashboard();
+  }
+
+  switchPanel('dashboard');
+})();
+</script>
+</body>
+</html>
